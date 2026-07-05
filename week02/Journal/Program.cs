@@ -4,40 +4,24 @@ class Program
 {
     static void Main(string[] args)
     {
-        Journal journal = new Journal();
-        PromptGenerator generator = new PromptGenerator();
+        Job job1 = new Job();
+        job1._jobTitle = "Software Engineer";
+        job1._company = "Microsoft";
+        job1._startYear = 2019;
+        job1._endYear = 2022;
 
-        string choice = "";
+        Job job2 = new Job();
+        job2._jobTitle = "Manager";
+        job2._company = "Apple";
+        job2._startYear = 2022;
+        job2._endYear = 2023;
 
-        while (choice != "3")
-        {
-            Console.WriteLine("Please select one of the following choices:");
-            Console.WriteLine("1. Write");
-            Console.WriteLine("2. Display");
-            Console.WriteLine("3. Exit");
-            Console.Write("What would you like to do? ");
-            choice = Console.ReadLine();
+        Resume myResume = new Resume();
+        myResume._name = "Your Name";
 
-            if (choice == "1")
-            {
-                Entry entry = new Entry();
+        myResume._jobs.Add(job1);
+        myResume._jobs.Add(job2);
 
-                entry._date = DateTime.Now.ToShortDateString();
-                entry._prompt = generator.GetRandomPrompt();
-
-                Console.WriteLine(entry._prompt);
-                entry._text = Console.ReadLine();
-
-                journal.AddEntry(entry);
-            }
-            else if (choice == "2")
-            {
-                journal.DisplayAll();
-            }
-            else if (choice == "3")
-            {
-                Console.WriteLine("Goodbye!");
-            }
-        }
+        myResume.Display();
     }
 }
