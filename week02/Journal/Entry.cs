@@ -1,17 +1,20 @@
 using System;
+using System.Collections.Generic;
 
-public class Entry
+public class Journal
 {
-    public string _date;
-    public string _prompt;
-    public string _text;
+    private List<Entry> _entries = new List<Entry>();
 
-    public void Display()
+    public void AddEntry(Entry newEntry)
     {
-        Console.WriteLine("------------------------------");
-        Console.WriteLine($"Date: {_date}");
-        Console.WriteLine($"Prompt: {_prompt}");
-        Console.WriteLine($"Entry: {_text}");
-        Console.WriteLine("------------------------------");
+        _entries.Add(newEntry);
+    }
+
+    public void DisplayAll()
+    {
+        foreach (Entry entry in _entries)
+        {
+            entry.Display();
+        }
     }
 }

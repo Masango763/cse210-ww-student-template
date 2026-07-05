@@ -9,7 +9,7 @@ class Program
 
         string choice = "";
 
-        while (choice != "5")
+        while (choice != "3")
         {
             Console.WriteLine("Please select one of the following choices:");
             Console.WriteLine("1. Write");
@@ -33,6 +33,10 @@ class Program
             else if (choice == "2")
             {
                 journal.DisplayAll();
+            }
+            else if (choice == "3")
+            {
+                Console.WriteLine("Goodbye!");
             }
         }
     }
