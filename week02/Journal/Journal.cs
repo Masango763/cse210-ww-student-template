@@ -19,10 +19,15 @@ public class Journal
             return;
         }
 
+        Console.WriteLine("\n--- Journal Entries ---");
+
         foreach (Entry entry in _entries)
         {
             entry.Display();
         }
+
+        // Creativity feature: entry counter
+        Console.WriteLine($"Total Entries: {_entries.Count}");
     }
 
     public void SaveToFile(string fileName)
