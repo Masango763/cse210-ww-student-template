@@ -1,71 +1,75 @@
 using System;
 using System.Collections.Generic;
 
-namespace ScriptureMemorizer
+public class Scripture
 {
-    public class Scripture
+    private Reference _reference;
+    private List<Word> _words;
+
+    public Scripture(Reference reference, string text)
     {
-        private Reference _reference;
-        private List<Word> _words;
+        _reference = reference;
+        _words = new List<Word>();
 
-        public Scripture(Reference reference, string text)
+        // Splitting the text by spaces directly inside the constructor
+        string[] splitWords = text.Split(' ');
+        foreach (string wordText in splitWords)
         {
-            _reference = reference;
-            _words = new List<Word>();
+            _words.Add(new Word(wordText));
+        }
+    }
 
-            string[] splitWords = text.Split(' ');
-            foreach (string wordText in splitWords)
+    // STRETCH CHALLENGE: Targets only words that are currently visible
+    public void HideRandomWords(int numberToHide)
+    {
+        Random random = new Random();
+        
+        // Find positions of words that are still visible
+        List<int> visibleIndices = new List<int>();
+        for (int i = 0; i < _words.Count; i++)
+        {
+            if (!_words[i].IsHidden())
             {
-                _words.Add(new Word(wordText));
+                visibleIndices.Add(i);
             }
         }
 
-        public void HideRandomWords(int numberToHide)
+        // Adjust requested count if there are fewer visible words left
+        int actualToHide = Math.Min(numberToHide, visibleIndices.Count);
+
+        for (int i = 0; i < actualToHide; i++)
         {
-            Random random = new Random();
-            int hiddenCount = 0;
+            int randomIndex = random.Next(visibleIndices.Count);
+            int wordToHideIndex = visibleIndices[randomIndex];
 
-            List<int> visibleIndices = new List<int>();
-            for (int i = 0; i < _words.Count; i++)
-            {
-                if (!_words[i].IsHidden())
-                {
-                    visibleIndices.Add(i);
-                }
-            }
+            _words[wordToHideIndex].Hide();
+            visibleIndices.RemoveAt(randomIndex); // Protect against duplicate hiding in this execution cycle
+        }
+    }
 
-            while (hiddenCount < numberToHide && visibleIndices.Count > 0)
-            {
-                int randomIndex = random.Next(visibleIndices.Count);
-                int targetWordIndex = visibleIndices[randomIndex];
-
-                _words[targetWordIndex].Hide();
-                visibleIndices.RemoveAt(randomIndex);
-                hiddenCount++;
-            }
+    // Merges the reference and the formatted list of words
+    public string GetDisplayText()
+    {
+        List<string> displayWords = new List<string>();
+        foreach (Word word in _words)
+        {
+            displayWords.Add(word.GetDisplayText());
         }
 
-        public string GetDisplayText()
-        {
-            List<string> renderedWords = new List<string>();
-            foreach (Word word in _words)
-            {
-                renderedWords.Add(word.GetDisplayText());
-            }
+        string formattedText = string.Join(" ", displayWords);
+        return $"{_reference.GetDisplayText()} - {formattedText}";
+    }
 
-            return $"{_reference.GetDisplayText()} - {string.Join(" ", renderedWords)}";
-        }
-
-        public bool IsCompletelyHidden()
+    // Returns true when every word in the scripture is hidden
+    public bool IsCompletelyHidden()
+    {
+        foreach (Word word in _words)
         {
-            foreach (Word word in _words)
+            if (!word.IsHidden())
             {
-                if (!word.IsHidden())
-                {
-                    return false;
-                }
+                return false;
             }
-            return true;
         }
+        return true;
     }
 }

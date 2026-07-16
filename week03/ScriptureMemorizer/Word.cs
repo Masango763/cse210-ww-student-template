@@ -1,35 +1,40 @@
 using System;
 
-namespace ScriptureMemorizer
+public class Word
 {
-    public class Word
+    private string _text;
+    private bool _isHidden;
+
+    // Constructor: All words start as visible
+    public Word(string text)
     {
-        private string _text;
-        private bool _isHidden;
+        _text = text;
+        _isHidden = false;
+    }
 
-        public Word(string text)
-        {
-            _text = text;
-            _isHidden = false;
-        }
+    public void Hide()
+    {
+        _isHidden = true;
+    }
 
-        public void Hide()
-        {
-            _isHidden = true;
-        }
+    public void Show()
+    {
+        _isHidden = false;
+    }
 
-        public bool IsHidden()
-        {
-            return _isHidden;
-        }
+    public bool IsHidden()
+    {
+        return _isHidden;
+    }
 
-        public string GetDisplayText()
+    // Encapsulates how the word renders itself
+    public string GetDisplayText()
+    {
+        if (_isHidden)
         {
-            if (_isHidden)
-            {
-                return new string('_', _text.Length);
-            }
-            return _text;
+            // Replaces the word with an exact matching number of underscores
+            return new string('_', _text.Length);
         }
+        return _text;
     }
 }
