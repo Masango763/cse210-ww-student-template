@@ -1,53 +1,53 @@
 using System;
 
 // ===================================================================================
-// CREATIVITY AND EXCEEDING REQUIREMENTS:
-// 1. Bulk Discount Pricing Matrix: Implemented dynamic line-item pricing adjustments. 
-//    If a customer orders more than 2 units of any single product line, the system 
-//    automatically triggers a 10% unit price deduction for that item.
+// SYSTEM DRIVER: OnlineOrdering Program
+// This entry point initializes the object graph by setting up addresses, linking
+// them to customers, assembling product lines, and calculating totals via the order.
 // ===================================================================================
 
-public class Product
+class Program
 {
-    private string _name;
-    private string _productId;
-    private double _price;
-    private int _quantity;
-
-    public Product(string name, string productId, double price, int quantity)
+    static void Main(string[] args)
     {
-        _name = name;
-        _productId = productId;
-        _price = price;
-        _quantity = quantity;
-    }
+        // ---------------------------------------------------------------------------
+        // ORDER 1: Domestic US Customer Order Configuration
+        // ---------------------------------------------------------------------------
+        Address address1 = new Address("123 Alpine Way", "Rexburg", "ID", "USA");
+        Customer customer1 = new Customer("John Doe", address1);
+        Order order1 = new Order(customer1);
+        
+        // Adding line items (quantities are <= 2, standard pricing applies)
+        order1.AddProduct(new Product("Mechanical Keyboard", "K832", 89.99, 1));
+        order1.AddProduct(new Product("Ergonomic Mouse", "M210", 45.50, 2));
 
-    public double GetDiscountedUnitPrice()
-    {
-        if (_quantity > 2)
-        {
-            return _price * 0.90; // 10% markdown applied
-        }
-        return _price;
-    }
+        // ---------------------------------------------------------------------------
+        // ORDER 2: International Order Configuration (Triggers Bulk Discounts)
+        // ---------------------------------------------------------------------------
+        Address address2 = new Address("456 Sakura Dr", "Kyoto", "Kyoto Prefecture", "Japan");
+        Customer customer2 = new Customer("Jane Smith", address2);
+        Order order2 = new Order(customer2);
 
-    public double GetTotalCost()
-    {
-        return GetDiscountedUnitPrice() * _quantity;
-    }
+        order2.AddProduct(new Product("Noise Cancelling Headphones", "H500", 249.99, 1));
+        // EXCEEDING REQUIREMENTS: Quantity of 3 triggers a 10% line-item price discount
+        order2.AddProduct(new Product("USB-C Charging Cable", "C102", 12.00, 3)); 
+        order2.AddProduct(new Product("Laptop Stand", "S044", 35.00, 1));
 
-    public string GetName()
-    {
-        return _name;
-    }
+        // ---------------------------------------------------------------------------
+        // OUTPUT GENERATION & DISPLAY
+        // ---------------------------------------------------------------------------
+        
+        // Display Order 1 Details (Domestic Shipping: $5)
+        Console.WriteLine(order1.GetPackingLabel());
+        Console.WriteLine(order1.GetShippingLabel());
+        Console.WriteLine($"Total Order Price (incl. shipping): ${order1.CalculateTotalCost():F2}");
+        Console.WriteLine(new string('=', 40));
+        Console.WriteLine();
 
-    public string GetProductId()
-    {
-        return _productId;
-    }
-
-    public int GetQuantity()
-    {
-        return _quantity;
+        // Display Order 2 Details (International Shipping: $35 + Volume Discount Applied)
+        Console.WriteLine(order2.GetPackingLabel());
+        Console.WriteLine(order2.GetShippingLabel());
+        Console.WriteLine($"Total Order Price (incl. shipping): ${order2.CalculateTotalCost():F2}");
+        Console.WriteLine(new string('=', 40));
     }
 }
