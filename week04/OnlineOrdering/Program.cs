@@ -1,37 +1,53 @@
 using System;
 
-class Program
+// ===================================================================================
+// CREATIVITY AND EXCEEDING REQUIREMENTS:
+// 1. Bulk Discount Pricing Matrix: Implemented dynamic line-item pricing adjustments. 
+//    If a customer orders more than 2 units of any single product line, the system 
+//    automatically triggers a 10% unit price deduction for that item.
+// ===================================================================================
+
+public class Product
 {
-    static void Main(string[] args)
+    private string _name;
+    private string _productId;
+    private double _price;
+    private int _quantity;
+
+    public Product(string name, string productId, double price, int quantity)
     {
-        // Order 1: US Customer
-        Address address1 = new Address("123 Alpine Way", "Rexburg", "ID", "USA");
-        Customer customer1 = new Customer("John Doe", address1);
-        Order order1 = new Order(customer1);
-        
-        order1.AddProduct(new Product("Mechanical Keyboard", "K832", 89.99, 1));
-        order1.AddProduct(new Product("Ergonomic Mouse", "M210", 45.50, 2));
+        _name = name;
+        _productId = productId;
+        _price = price;
+        _quantity = quantity;
+    }
 
-        // Order 2: International Customer
-        Address address2 = new Address("456 Sakura Dr", "Kyoto", "Kyoto Prefecture", "Japan");
-        Customer customer2 = new Customer("Jane Smith", address2);
-        Order order2 = new Order(customer2);
+    public double GetDiscountedUnitPrice()
+    {
+        if (_quantity > 2)
+        {
+            return _price * 0.90; // 10% markdown applied
+        }
+        return _price;
+    }
 
-        order2.AddProduct(new Product("Noise Cancelling Headphones", "H500", 249.99, 1));
-        order2.AddProduct(new Product("USB-C Charging Cable", "C102", 12.00, 3));
-        order2.AddProduct(new Product("Laptop Stand", "S044", 35.00, 1));
+    public double GetTotalCost()
+    {
+        return GetDiscountedUnitPrice() * _quantity;
+    }
 
-        // Display Order 1 Details
-        Console.WriteLine(order1.GetPackingLabel());
-        Console.WriteLine(order1.GetShippingLabel());
-        Console.WriteLine($"Total Order Price: ${order1.CalculateTotalCost():F2}");
-        Console.WriteLine(new string('=', 40));
-        Console.WriteLine();
+    public string GetName()
+    {
+        return _name;
+    }
 
-        // Display Order 2 Details
-        Console.WriteLine(order2.GetPackingLabel());
-        Console.WriteLine(order2.GetShippingLabel());
-        Console.WriteLine($"Total Order Price: ${order2.CalculateTotalCost():F2}");
-        Console.WriteLine(new string('=', 40));
+    public string GetProductId()
+    {
+        return _productId;
+    }
+
+    public int GetQuantity()
+    {
+        return _quantity;
     }
 }

@@ -1,6 +1,13 @@
 using System;
 using System.Collections.Generic;
 
+// ===================================================================================
+// CREATIVITY AND EXCEEDING REQUIREMENTS:
+// 1. Intelligent Packing Slip Manifests: Enhanced the packing slip rendering engine 
+//    to print specialized validation markers (`*Bulk Discount Applied*`) next to line 
+//    items whenever specific product quantities trigger wholesale tier price cuts.
+// ===================================================================================
+
 public class Order
 {
     private List<Product> _products;
@@ -34,7 +41,14 @@ public class Order
         string label = "--- PACKING LABEL ---\n";
         foreach (Product product in _products)
         {
-            label += $"Item: {product.GetName()} (ID: {product.GetProductId()})\n";
+            if (product.GetQuantity() > 2)
+            {
+                label += $"Item: {product.GetName()} (ID: {product.GetProductId()}) x{product.GetQuantity()} *Bulk Discount Applied*\n";
+            }
+            else
+            {
+                label += $"Item: {product.GetName()} (ID: {product.GetProductId()}) x{product.GetQuantity()}\n";
+            }
         }
         return label;
     }
